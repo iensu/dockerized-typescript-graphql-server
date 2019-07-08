@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    ports:
+      - '4000:4000'
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/test-db
+      - PORT=4000
+    depends_on:
+      - transpiler
+      - mongo
+    command: npm run dev
+
+  transpiler:
+    build: .
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    command: npm run watch
+
+  mongo:
+    image: 'mongo:3.6.6'
+    ports:
+      - '27017:27017'
+    command: ["mongod", "--quiet"]

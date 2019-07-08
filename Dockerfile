@@ -1,15 +1,24 @@
-FROM node:10
+# --- Build step
+FROM node:10.16 AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY ./package*.json ./
-COPY ./tsconfig.json ./
-COPY ./src ./src/
 
 RUN npm install --quiet --unsafe-perm
 
-EXPOSE 4000
+COPY ./tsconfig.json ./
+COPY ./src ./src/
 
-RUN ls -a
+RUN npm run build
+
+FROM node:10.16
+
+# Execution step
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist/
+
+EXPOSE 4000
 
 CMD ["node", "dist/src/index.js"]

@@ -6,13 +6,16 @@ import { typeDefs, resolvers } from './schemas';
 import CatAPI from './data-sources/cat-api';
 import * as App from './types/app';
 
-export function createServer(opts: Partial<ApolloServerExpressConfig>): ApolloServer {
+export function createServer(
+  services: App.Services,
+  opts: Partial<ApolloServerExpressConfig>
+): ApolloServer {
   return new ApolloServer({
     typeDefs,
     resolvers: resolvers as IResolvers,
     dataSources: () =>
       ({
-        catApi: new CatAPI(),
+        catApi: new CatAPI(services.db),
       } as DataSources<App.DataSources>),
     ...opts,
   });

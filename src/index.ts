@@ -1,10 +1,36 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { MongoClient } from 'mongodb';
+
+import Config from './config';
 import { createServer } from './server';
 
-const server = createServer({
-  playground: true,
-  introspection: true,
-});
+async function startServer() {
+  try {
+    const client = await MongoClient.connect(Config.MONGODB_URI, {
+      useNewUrlParser: true,
+      reconnectTries: 2,
+      reconnectInterval: 500,
+      connectTimeoutMS: 3000,
+      socketTimeoutMS: 3000,
+    });
 
-server.listen({ port: 4000 }).then(({ url }) => {
-  console.log(`Server ready @ ${url}`);
-});
+    const server = createServer(
+      { db: client.db() },
+      {
+        playground: Config.PLAYGROUND_ENABLED,
+        introspection: Config.INTROSPECTION_ENABLED,
+      }
+    );
+
+    const { url } = await server.listen({ port: Config.PORT });
+
+    console.log(`Server ready @ ${url}`);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+startServer();
