@@ -32,8 +32,13 @@ export const typeDefs = gql`
     id: ID
   }
 
+  type RemoveCatOutput {
+    status: GenericStatus!
+  }
+
   extend type Mutation {
     addCat(input: AddCatInput!): AddCatOutput!
+    removeCat(id: String!): RemoveCatOutput!
   }
 `;
 
@@ -59,6 +64,21 @@ const addCat: GQL.Resolver<
   return { status: GQL.GenericStatus.Ok, id };
 };
 
+const removeCat: GQL.Resolver<
+  GQL.RemoveCatOutput,
+  {},
+  App.ResolverContext,
+  GQL.MutationRemoveCatArgs
+> = async (_parent, { id }, { dataSources }) => {
+  const response = await dataSources.catApi.removeCat(id);
+
+  if (response.deletedCount === 1) {
+    return { status: GQL.GenericStatus.Ok };
+  }
+
+  return { status: GQL.GenericStatus.Failed };
+};
+
 export const resolvers = {
   Query: {
     cat,
@@ -66,6 +86,7 @@ export const resolvers = {
   },
   Mutation: {
     addCat,
+    removeCat,
   },
   Cat: {
     id: (catDoc: CatDoc) => catDoc._id,

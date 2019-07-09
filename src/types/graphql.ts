@@ -33,6 +33,8 @@ export type Cat = {
   id: Scalars['ID'];
   name: Scalars['String'];
   age: Scalars['Int'];
+  race: Scalars['String'];
+  owner: Scalars['String'];
 };
 
 export type CatQueryInput = {
@@ -49,10 +51,15 @@ export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
   addCat: AddCatOutput;
+  removeCat: RemoveCatOutput;
 };
 
 export type MutationAddCatArgs = {
   input: AddCatInput;
+};
+
+export type MutationRemoveCatArgs = {
+  id: Scalars['String'];
 };
 
 export type Query = {
@@ -64,6 +71,11 @@ export type Query = {
 
 export type QueryCatArgs = {
   input: CatQueryInput;
+};
+
+export type RemoveCatOutput = {
+  __typename?: 'RemoveCatOutput';
+  status: GenericStatus;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -135,6 +147,7 @@ export type ResolversTypes = {
   AddCatInput: AddCatInput;
   AddCatOutput: ResolverTypeWrapper<AddCatOutput>;
   GenericStatus: GenericStatus;
+  RemoveCatOutput: ResolverTypeWrapper<RemoveCatOutput>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -152,6 +165,7 @@ export type ResolversParentTypes = {
   AddCatInput: AddCatInput;
   AddCatOutput: AddCatOutput;
   GenericStatus: GenericStatus;
+  RemoveCatOutput: RemoveCatOutput;
   Boolean: Scalars['Boolean'];
   CacheControlScope: CacheControlScope;
   Upload: Scalars['Upload'];
@@ -176,17 +190,32 @@ export type CatResolvers<ContextType = any, ParentType = ResolversParentTypes['C
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   age?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  race?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   addCat?: Resolver<ResolversTypes['AddCatOutput'], ParentType, ContextType, MutationAddCatArgs>;
+  removeCat?: Resolver<
+    ResolversTypes['RemoveCatOutput'],
+    ParentType,
+    ContextType,
+    MutationRemoveCatArgs
+  >;
 };
 
 export type QueryResolvers<ContextType = any, ParentType = ResolversParentTypes['Query']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cat?: Resolver<Maybe<ResolversTypes['Cat']>, ParentType, ContextType, QueryCatArgs>;
   cats?: Resolver<Array<ResolversTypes['Cat']>, ParentType, ContextType>;
+};
+
+export type RemoveCatOutputResolvers<
+  ContextType = any,
+  ParentType = ResolversParentTypes['RemoveCatOutput']
+> = {
+  status?: Resolver<ResolversTypes['GenericStatus'], ParentType, ContextType>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -198,6 +227,7 @@ export type Resolvers<ContextType = any> = {
   Cat?: CatResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RemoveCatOutput?: RemoveCatOutputResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 

@@ -35,6 +35,6 @@ services:
     image: 'mongo:3.6.6'
     ports:
       - '27017:27017'
-    command: ["mongod", "--quiet"]
+    command: ["mongod", "--smallfiles", "--quiet", "--logpath=/dev/null"]
     networks:
       - graphql-server-network

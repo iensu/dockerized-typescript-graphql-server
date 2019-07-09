@@ -1,15 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import * as mongodb from 'mongodb';
 
-import * as GQL from '../types/graphql';
-import Config from '../config';
-
-const catList = [
-  { id: 'a', name: 'Cuddlepuff', age: 18 },
-  { id: 'b', name: 'Meffis', age: 17 },
-  { id: 'c', name: 'Mims', age: 16 },
-];
-
 export interface CatDoc {
   _id: string;
   name: string;
@@ -31,7 +22,7 @@ class CatAPI extends RESTDataSource {
       .collection(this.collection)
       .findOne<CatDoc>({ _id: new mongodb.ObjectId(id) });
 
-    return Promise.resolve(doc);
+    return doc;
   }
 
   async getCats(): Promise<CatDoc[]> {
@@ -44,7 +35,11 @@ class CatAPI extends RESTDataSource {
   async addCat(cat: { name: string; age: number }) {
     const res = await this.db.collection(this.collection).insertOne(cat);
 
-    return Promise.resolve(res.insertedId.toHexString());
+    return res.insertedId.toHexString();
+  }
+
+  async removeCat(id: string) {
+    return this.db.collection(this.collection).deleteOne({ _id: new mongodb.ObjectId(id) });
   }
 }
 
