@@ -20,7 +20,7 @@ services:
       - db
     networks:
       - graphql-server-network
-    command: npm run dev
+    command: ["/app/node_modules/.bin/nodemon", "dist/src/index.js"]
 
   transpiler:
     build: .
@@ -29,7 +29,7 @@ services:
       - ./node_modules:/app/node_modules
     networks:
       - graphql-server-network
-    command: npm run watch
+    command: ["/app/node_modules/.bin/tsc", "--watch"]
 
   db:
     image: 'mongo:3.6.6'

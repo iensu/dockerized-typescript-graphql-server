@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node ./dist/src/index.js",
     "build": "rm -rf ./dist && tsc",
-    "watch": "tsc --watch",
-    "dev": "nodemon dist/src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "docker-compose up --build; docker-compose down",
     "test:integration": "./scripts/run-integration-tests.sh",
     "gql:generate-types": "graphql-codegen --config codegen.yml"
   },
