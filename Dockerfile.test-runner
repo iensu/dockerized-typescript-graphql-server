@@ -1,5 +1,5 @@
 # --- Build step
-FROM node:10.16 AS builder
+FROM node:alpine AS builder
 
 WORKDIR /test-runner
 
@@ -10,7 +10,7 @@ RUN npm install --quiet --unsafe-perm
 
 COPY ./test ./test/
 
-FROM node:10.16
+FROM node:alpine
 
 # Execution step
 WORKDIR /test-runner

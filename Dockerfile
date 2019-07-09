@@ -1,5 +1,5 @@
 # --- Build step
-FROM node:10.16 AS builder
+FROM node:alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY ./src ./src/
 
 RUN npm run build
 
-FROM node:10.16
+FROM node:alpine
 
 # Execution step
 WORKDIR /app
