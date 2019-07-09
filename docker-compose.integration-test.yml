@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  graphql-server-integration-test:
+    driver: bridge
+
+services:
+  graphql-server:
+    ports:
+      - '4000:4000'
+    networks:
+      - graphql-server-integration-test
+    command: ["node", "/app/dist/src/index.js"]
+
+  transpiler:
+    networks:
+      - graphql-server-integration-test
+
+  db:
+    networks:
+      - graphql-server-integration-test
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test-runner
+    depends_on:
+      - graphql-server
+    ports:
+      - '4649:4649'
+    environment:
+      APP_URL: 'http://graphql-server:4000'
+    networks:
+      - graphql-server-integration-test
+    command: ["/test-runner/scripts/wait-for-it.sh", "graphql-server:4000", "--", "/test-runner/node_modules/.bin/mocha", "--delay 2000"]

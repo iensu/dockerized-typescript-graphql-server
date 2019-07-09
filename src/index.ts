@@ -8,6 +8,7 @@ import { createServer } from './server';
 
 async function startServer() {
   try {
+    console.log(`Starting server @ ${Config.PORT}`);
     const client = await MongoClient.connect(Config.MONGODB_URI, {
       useNewUrlParser: true,
       reconnectTries: 2,

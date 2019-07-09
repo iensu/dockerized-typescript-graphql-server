@@ -1,0 +1,20 @@
+# --- Build step
+FROM node:10.16 AS builder
+
+WORKDIR /test-runner
+
+COPY ./test/integration/package*.json ./
+COPY ./scripts/wait-for-it.sh ./scripts/
+
+RUN npm install --quiet --unsafe-perm
+
+COPY ./test ./test/
+
+FROM node:10.16
+
+# Execution step
+WORKDIR /test-runner
+
+COPY --from=builder /test-runner ./
+
+EXPOSE 4649
