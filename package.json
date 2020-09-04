@@ -38,7 +38,7 @@
     "dotenv": "^8.0.0",
     "envalid": "^5.0.0",
     "graphql": "^14.4.2",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "mongodb": "^3.2.7"
   }
 }
